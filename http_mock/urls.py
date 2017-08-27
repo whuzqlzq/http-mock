@@ -15,7 +15,21 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from importlib import import_module
+import utils.config as config
+import json
+import os
+
+base_pkg = 'http_mock.views.'
+base_func = 'execute'
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
 ]
+
+urls = config.get_urls('http_mock/config/*[a-z0-9].py')
+
+for u in urls:
+    m = import_module(base_pkg+u['view'])
+    v = getattr(m, base_func)
+    urlpatterns.append(url(u['url'], v, {'response': u['response']}))

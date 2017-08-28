@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 from importlib import import_module
 import glob
+import os
 
 
 # 相对路径
@@ -11,10 +12,8 @@ def get_files(rel_path='../config/*[a-z0-9].py'):
     lp = []
 
     for p in f:
-        ps = p.split('/')
-        ps = ps[-1].split('.')
-        ps = ps[0]
-        lp.append(ps)
+        ps = os.path.basename(p).split('.')
+        lp.append(ps[0])
 
     return lp
 

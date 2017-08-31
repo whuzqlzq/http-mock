@@ -30,5 +30,10 @@ urls = config.get_urls('http_mock/config/*[a-z0-9].py')
 for u in urls:
     m = import_module(base_pkg+u['view'])
     v = getattr(m, base_func)
-    urlpatterns.append(url(u['url'], v, {'response': u['response']}))
+    up = u.copy()
+    if up.has_key('url'):
+        del up['url']
+    if up.has_key('view'):
+        del up['view']
+    urlpatterns.append(url(u['url'], v, up))
     print('add url pattern, url=' + u['url'] + ',view=' + u['view'])
